@@ -3,30 +3,30 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12" v-if="currentName!==''" >
-          You nick name: {{currentName}}
-            <b-card class="mb-2">
-              <twitters-list
-                      :update="newTwitt"
-                      limit="20"
-                      @load-complete="loadComplete"></twitters-list>
-            </b-card>
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-lg-10">
-                  <b-form-input
-                          type="text"
-                          v-model="message"
-                          maxlength="50"
-                          placeholder="Enter you message"></b-form-input>
-                  <div class="invalid-feedback" :class="{visible: error.message }">
-                    Please type you message.
-                  </div>
-                </div>
-                <div class="col-md-auto">
-                  <b-button variant="primary" @click="newTwitter">Post</b-button>
+          <div class="container-fluid">
+            <div class="row" style="margin-bottom: 10px">You nick name: {{currentName}}</div>
+            <div class="row">
+              <div class="col-lg-10">
+                <b-form-input
+                        type="text"
+                        v-model="message"
+                        maxlength="50"
+                        placeholder="Enter you message"></b-form-input>
+                <div class="invalid-feedback" :class="{visible: error.message }">
+                  Please type you message.
                 </div>
               </div>
+              <div class="col-md-auto">
+                <b-button variant="primary" @click="newTwitter">Post</b-button>
+              </div>
             </div>
+          </div>
+          <b-card class="mb-2" style="margin-top: 10px;">
+            <twitters-list
+                    :update="newTwitt"
+                    limit="20"
+                    @load-complete="loadComplete"></twitters-list>
+          </b-card>
         </div>
         <div class="col-lg-4" v-if="currentName===''">
             <b-card title="Join to twitter" style="max-width: 20rem;" class="mb-2">
@@ -40,10 +40,7 @@
             <b-button variant="primary" @click="join">Join</b-button>
         </div>
       </div>
-
     </div>
-
-
   </div>
 </template>
 
@@ -73,7 +70,6 @@ export default {
     },
     methods: {
         join () {
-          console.log('join')
           this.error.nameSelected = (this.nameSelected === '')
           if (this.error.nameSelected) {
               return false
@@ -92,11 +88,10 @@ export default {
                     body: JSON.stringify({nick: this.currentName, tweet: this.message})
                 })
                 const content = await rawResponse.json()
+                this.newTwitt = true
             })();
-
             this.message = ''
             this.error.message = false
-            this.newTwitt = true
         },
         loadComplete () {
             this.newTwitt = false
